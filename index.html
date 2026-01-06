@@ -1,113 +1,80 @@
 <!DOCTYPE html>
-
 <html lang="ja">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>教室検索システム</title>
-
+    <title>2026年1月11日入試 | 教室検索システム</title>
     <style>
+        /* デザインの設定 */
+        body { 
+            font-family: sans-serif; 
+            text-align: center; 
+            padding: 20px; 
+            
+            /* ▼▼▼ 背景色とアニメーションの設定 ▼▼▼ */
+            /* Gemini風の淡い青紫〜ピンクのグラデーション */
+            background: linear-gradient(135deg, #e0f7fa, #e1bee7, #d1c4e9, #b2ebf2);
+            /* 背景のサイズを大きくして、動かせる範囲を作る */
+            background-size: 400% 400%;
+            /* 15秒かけてゆっくりと背景を動かすアニメーションを設定 */
+            animation: gradientAnimation 15s ease infinite;
+            /* ▲▲▲ ここまで ▲▲▲ */
 
-        /* ここはデザインの設定です */
+            min-height: 100vh;
+            margin: 0;
+        }
 
-/* デザインの設定 */
+        /* 背景を動かすためのキーフレーム定義 */
+        @keyframes gradientAnimation {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
 
-body { 
+        .container { 
+            max-width: 400px; 
+            margin: 50px auto 0; 
+            /* 背景を少し透けさせる（白の透明度90%） */
+            background: rgba(255, 255, 255, 0.9);
+            /* すりガラスのようなぼかし効果 */
+            backdrop-filter: blur(10px);
+            padding: 30px; 
+            border-radius: 15px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+        }
 
-    font-family: sans-serif; 
-
-    text-align: center; 
-
-    padding: 20px; 
-
-    /* ▼▼▼ 背景色の変更ここから ▼▼▼ */
-
-    /* Gemini風の淡い青紫〜ピンクのグラデーション */
-
-    background: linear-gradient(135deg, #e0f7fa 0%, #e1bee7 100%);
-
-    /* 画面の高さが足りなくても背景が切れないようにする設定 */
-
-    min-height: 100vh;
-
-    margin: 0;
-
-    /* ▼▼▼ ここまで ▼▼▼ */
-
-}
-
-
-
-.container { 
-
-    max-width: 400px; 
-
-    margin: 50px auto 0; /* 上に少し隙間を空ける */
-
-    /* ▼▼▼ 検索ボックスのデザイン変更 ▼▼▼ */
-
-    /* 背景を少し透けさせる（白の透明度90%） */
-
-    background: rgba(255, 255, 255, 0.9);
-
-    /* すりガラスのようなぼかし効果（対応ブラウザのみ） */
-
-    backdrop-filter: blur(10px);
-
-    padding: 30px; 
-
-    border-radius: 15px; /* 角を少し丸く */
-
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1); /* 影を柔らかく広げる */
-
-    /* ▼▼▼ ここまで ▼▼▼ */
-
-}        h1 { font-size: 20px; color: #333; }
+        /* タイトルのスタイル調整 */
+        h1 { font-size: 22px; color: #333; margin-bottom: 5px; }
+        .sub-title { font-size: 16px; color: #666; margin-bottom: 20px; }
 
         input { width: 80%; padding: 15px; font-size: 18px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 10px; }
-
         button { width: 90%; padding: 15px; font-size: 18px; background-color: #007BFF; color: white; border: none; border-radius: 5px; cursor: pointer; }
-
         button:hover { opacity: 0.8; }
-
-        #result { margin-top: 20px; font-size: 24px; font-weight: bold; min-height: 1.2em; }
-
+        #result { margin-top: 20px; font-size: 24px; font-weight: bold; min-height: 1.2em; white-space: pre-wrap; }
         .error { color: red; }
-
         .success { color: #007BFF; }
-
     </style>
-
 </head>
-
 <body>
-
     <div class="container">
-
-        <h1>受験番号から教室を検索</h1>
-
+        <h1>2026年1月11日入試</h1>
+        <p class="sub-title">教室検索システム</p>
+        
         <p>受験番号を入力してください</p>
-
-        <input type="text" id="inputNumber" placeholder="例: A1001">
-
+        <input type="text" id="inputNumber" placeholder="例: A3301">
         <button onclick="searchRoom()">検索する</button>
-
         <div id="result"></div>
-
     </div>
 
-
-
     <script>
-
-        // ▼▼▼ ここにデータを入れます ▼▼▼
-
+        // ▼▼▼ データは変更していません ▼▼▼
         const data = {
-
 "A3046": "412",
 "A3301": "412",
 "A3302": "412",
@@ -673,67 +640,32 @@ body {
 "A3110": "第1AVE",
 "M1103B": "第1AVE",
         };
-
         // ▲▲▲ ここまで ▲▲▲
 
-
-
-function searchRoom() {
-
-            // 入力された文字の前後の空白を消し、すべて大文字に変換する
-
+        function searchRoom() {
             const number = document.getElementById("inputNumber").value.trim().toUpperCase();
-
             const resultDiv = document.getElementById("result");
-
             
-
-            // 入力が空の場合
-
             if (!number) {
-
                 resultDiv.innerText = "番号を入力してください";
-
                 resultDiv.className = "error";
-
                 return;
-
             }
-
-
-
-            // データを検索
 
             if (data[number]) {
-
                 resultDiv.innerText = "あなたの教室は\n「" + data[number] + "」です";
-
                 resultDiv.className = "success";
-
             } else {
-
                 resultDiv.innerText = "該当する番号が見つかりません";
-
                 resultDiv.className = "error";
-
             }
-
         }
 
-// Enterキーが押されたら検索を実行する
-
-document.getElementById("inputNumber").addEventListener("keydown", function(event) {
-
-    if (event.key === "Enter") {
-
-        searchRoom();
-
-    }
-
-});
-
+        document.getElementById("inputNumber").addEventListener("keydown", function(event) {
+            if (event.key === "Enter") {
+                searchRoom();
+            }
+        });
     </script>
-
 </body>
-
 </html>
